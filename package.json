@@ -21,11 +21,12 @@
     "@types/yargs": "0.0.32",
     "chai": "^3.5.0",
     "mocha": "^3.1.0",
+    "ts-node": "^3.0.4",
     "tslint": "^4.1.0",
     "typescript": "^2.1.4"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha --compilers ts:ts-node/register,tsx:ts-node/register tests/**/*_spec.ts"
   },
   "repository": {
     "type": "git",
