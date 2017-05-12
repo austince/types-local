@@ -25,7 +25,7 @@ function main() {
         case 2:
             const command: string = argv._[0];
             if ("install".indexOf(command) === 0) {
-                TypesLocal.createTypesLocalPackage(argv._[1]);
+                TypesLocal.createTypesLocalPackage(argv._.slice(1));
             } else if ("uninstall".indexOf(command) === 0) {
                 TypesLocal.removeTypesLocalPackage(argv._[1]);
             } else {

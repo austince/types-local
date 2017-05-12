@@ -138,18 +138,31 @@ function removeModuleFromTsConfigJson(moduleName: string) {
     });
 }
 
-export function createTypesLocalPackage(moduleName: string) {
-    const module = requireModule(moduleName) || require(moduleName);
-    const result = dtsGen.generateModuleDeclarationFile(moduleName, module);
+/**
+ *
+ * @param moduleNameOrNames - a single or list of module names
+ */
+export function createTypesLocalPackage(moduleNameOrNames: (string|string[])) {
+    let modulesToType: string[];
+    if (typeof moduleNameOrNames === "string") {
+        modulesToType = [moduleNameOrNames];
+    } else {
+        modulesToType = moduleNameOrNames;
+    }
 
-    const typesLocalDirName = "types-local";
-    const typesLocalModuleDirPath = path.join(typesLocalDirName, moduleName);
+    for (const moduleName of modulesToType) {
+        const module = requireModule(moduleName) || require(moduleName);
+        const result = dtsGen.generateModuleDeclarationFile(moduleName, module);
 
-    const moduleVersion = getModuleVersion(moduleName);
-    prepareDirectory(typesLocalDirName, typesLocalModuleDirPath);
-    writePackageJson(moduleName, moduleVersion, typesLocalModuleDirPath);
-    writeDts(typesLocalModuleDirPath, result);
-    addModuleToTsConfigJson(moduleName);
+        const typesLocalDirName = "types-local";
+        const typesLocalModuleDirPath = path.join(typesLocalDirName, moduleName);
+
+        const moduleVersion = getModuleVersion(moduleName);
+        prepareDirectory(typesLocalDirName, typesLocalModuleDirPath);
+        writePackageJson(moduleName, moduleVersion, typesLocalModuleDirPath);
+        writeDts(typesLocalModuleDirPath, result);
+        addModuleToTsConfigJson(moduleName);
+    }
 }
 
 export function removeTypesLocalPackage(moduleName: string) {
